@@ -10,13 +10,12 @@ public class Cube : MonoBehaviour
     [SerializeField] private int _minDelay = 2;
     [SerializeField] private int _maxDelay = 5;
 
-    private Material _material;
     private Rigidbody _rigidbody;
     private ColorChanger _colorChanger;
 
     private bool _isTouched = false;
 
-    public event Action<Cube> CollisionEnter;
+    public event Action<Cube> Destroyed;
 
     public void Init()
     {
@@ -28,7 +27,6 @@ public class Cube : MonoBehaviour
 
     private void Awake()
     {
-        _material = GetComponent<Renderer>().material;
         _rigidbody = GetComponent<Rigidbody>();
         _colorChanger = GetComponent<ColorChanger>();
     }
@@ -48,6 +46,6 @@ public class Cube : MonoBehaviour
         WaitForSeconds delay = new WaitForSeconds(UnityEngine.Random.Range(_minDelay, _maxDelay));
         yield return delay;
 
-        CollisionEnter?.Invoke(this);
+        Destroyed?.Invoke(this);
     }
 }
