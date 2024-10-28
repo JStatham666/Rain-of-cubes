@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -20,7 +21,7 @@ public class Spawner : MonoBehaviour
     {
         _cubes = new ObjectPool<Cube>(
         createFunc: () => Instantiate(_cubePrefabe),
-        actionOnGet: (cube) => GettingAction(cube),
+        actionOnGet: (cube) => OnGet(cube),
         actionOnRelease: (cube) => cube.gameObject.SetActive(false),
         actionOnDestroy: (cube) => Destroy(cube.gameObject),
         collectionCheck: true,
@@ -28,11 +29,21 @@ public class Spawner : MonoBehaviour
         maxSize: _poolMaxSize);
     }
 
-    private void Start() => InvokeRepeating(nameof(Cube), 0.0f, _repeatRate);
+    private void Start() =>
+        StartCoroutine(GetCube());
 
-    private void Cube() => _cubes.Get();
+    private IEnumerator GetCube()
+    {
+        WaitForSeconds delay = new WaitForSeconds(_repeatRate);
 
-    private void GettingAction(Cube cube)
+        while (true)
+        {
+            _cubes.Get();
+            yield return delay;
+        }
+    }
+
+    private void OnGet(Cube cube)
     {
         cube.Destroyed += CubeRelease;
         cube.Init();

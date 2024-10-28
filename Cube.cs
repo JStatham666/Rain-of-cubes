@@ -21,7 +21,7 @@ public class Cube : MonoBehaviour
     {
         _isTouched = false;
         _rigidbody.velocity = Vector3.zero;
-        _colorChanger.SetStartColor(_material);
+        _colorChanger.SetStartColor();
         gameObject.SetActive(true);
     }
 
@@ -36,7 +36,7 @@ public class Cube : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out Platform platform) && _isTouched == false)
         {
             _isTouched = true;
-            _colorChanger.SetRandomColor(_material);
+            _colorChanger.SetRandomColor();
             StartCoroutine(CountDestroyDelay());
         }
     }
